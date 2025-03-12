@@ -1,0 +1,13 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=9Term
+Comment=9Term - Plan9 Terminal Emulation
+Exec=/opt/plan9/bin/9term rc -l
+Icon=/opt/plan9/dist/glendacircle.png
+StartupWMClass=9Term
+Type=Application
+Categories=Plan9;Utility;Application;TerminalEmulator;System;Shell;
+Hidden=false
+
