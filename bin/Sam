@@ -1,0 +1,11 @@
+#!/bin/bash
+
+TERM=dumb
+SHELL=rc
+
+tabstop=2
+font='/mnt/font/FiraCode-Regular/14a/font'
+
+export TERM SHELL tabstop font
+
+exec sam $*
