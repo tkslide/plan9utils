@@ -1,0 +1,17 @@
+[Unit]
+Description=Plan9 fontsrv
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Slice=plan9.slice
+Environment=MNTPT=/mnt
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/bin/bash -c 'PATH=/opt/plan9:$PATH fontsrv -m $MNTPT/font'
+ExecStop=/bin/bash -c 'PATH=/opt/plan9:$PATH pkill fontsrv'
+ExecStopPost=/bin/bash -c 'PATH=/opt/plan9:$PATH unmount $MNTPT/font'
+
+[Install]
+WantedBy=plan9.target

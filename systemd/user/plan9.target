@@ -1,0 +1,8 @@
+[Unit]
+Description=Plan9 services
+Requires=
+After=
+Wants=fontsrv.service plumber.service factotum.service
+
+[Install]
+WantedBy=

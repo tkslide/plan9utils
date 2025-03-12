@@ -1,0 +1,32 @@
+#! /opt/plan9/bin/rc
+
+. $PLAN9/lib/acme.rc
+
+GACME_WIDTH=70
+fullResponse=`{mktemp}
+
+fn get {
+	ncat --ssl $1 $2
+}
+
+if (~ $#* 4) {
+	echo $1 | get $2 $4 | tr -d \15 > $fullResponse
+}
+if not {
+	echo $1 | get $2 1965 | tr -d \15 > $fullResponse
+}
+
+prefix=`{echo -n $1 |sed -e 's+/+\\/+g'}
+
+newwindow
+winname $1
+cat $fullResponse | winwrite body
+winctl 'clean'
+printf '0,1' | winwrite addr
+echo -n | winwrite data
+printf '0,0' | winwrite addr
+winwctl 'cleartag'
+echo -n 'Edit ,x/^=> ([^ 	]+)[ 	]+(.*)/ s//=> ['$prefix'\1] \2/' | winwrite tag
+winctl 'dot=addr'
+winctl 'show'
+rm $fullResponse

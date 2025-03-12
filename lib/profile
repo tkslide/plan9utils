@@ -1,0 +1,49 @@
+;
+PLAN9=/opt/plan9
+SHELL=rc
+EDITOR=E
+MNTPT=/mnt
+PAGER=nobs
+MANPAGER=nobs
+
+tabstop=4
+acmeshell=rc
+user=$USER
+home=$HOME
+h=$HOME
+font=$PLAN9/font/terminus/ter-u14v.font
+prompt=('; ' '> ')
+path=( /home/$user/.local/bin /home/$user/bin $PLAN9/bin /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin)
+
+. $PLAN9/lib/acme.rc
+
+fn pstree {
+	builtin pstree -A
+}
+
+fn acme { 
+	if (ps -afe |grep -s 'futex_ acme') B $*
+	if not {
+		opts=()
+		if (grep -qs /mnt/acme /proc/mounts) x=1
+		if not opts=($opts -m /mnt/acme)
+		if (test -f acme.dump) opts=($opts -l acme.dump)
+		builtin /opt/plan9/bin/acme $opts $* &
+	}
+}
+
+fn start9 {
+	systemctl --user start plan9.target
+}
+
+fn stop9 {
+	systemctl --user stop plan9.slice 
+}
+
+fn status9 {
+	LC_CTYPE=C systemctl --user status plan9.slice
+}
+
+	
+
+

@@ -1,0 +1,18 @@
+[Unit]
+Description=Plan9 plumber
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Slice=plan9.slice
+Environment=MNTPT=/mnt
+Type=forking
+Restart=always
+RestartSec=1
+ExecStart=/bin/bash -c 'PATH=/opt/plan9:$PATH plumber'
+ExecStartPost=/bin/bash -c 'PATH=/opt/plan9:$PATH /opt/plan9/bin/mount $(namespace)/plumb $MNTPT/plumb'
+ExecStop=/bin/bash -c 'PATH=/opt/plan9:$PATH pkill plumber'
+ExecStopPost=/bin/bash -c 'PATH=/opt/plan9:$PATH /opt/plan9/bin/unmount $MNTPT/plumb'
+
+[Install]
+WantedBy=plan9.target

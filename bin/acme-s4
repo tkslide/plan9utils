@@ -1,0 +1,35 @@
+#! /bin/bash
+#echo "WinId is: " $winid
+format=$(9p read acme/$winid/tag)
+#echo "Tag is " $format
+#echo "Format in tag"
+case $format in
+    *".sno"* )
+#        echo "Snobol4 program"
+        interp="snobol4 -b" ;;
+    *".spt"* )
+#        echo "Spitbol program"
+        interp="spitbol" ;;
+    * )
+#     echo "Unrecognized format, defaulting to Snobol4"
+     interp="snobol4 -b" ;;
+esac
+prog=${a%% Del*}
+
+if [ -e $prog ]; then
+tempfile=$(mktemp --suffix ".sno")
+echo -n "1,$" | 9p write acme/$winid/addr
+#echo "Selected whole contents for overwriting with 'write'"
+9p read acme/$winid/body > $tempfile
+snobol4 -br $tempfile | 9p write acme/new/body
+rm $tempfile
+#echo "Wrote the output to a new buffer"
+last=$(9p ls acme | sort -g | tail -n 1)
+#echo "Get last created buffer"
+echo -n "clean" | 9p write acme/$last/ctl
+echo -n "0,0" | 9p write acme/$last/addr
+echo -n "dot=addr" | 9p write acme/$last/ctl
+echo -n "show" | 9p write acme/$last/ctl
+echo -n "$prog Output" |9p write acme/$last/tag
+#echo "Moved to beginning"
+fi

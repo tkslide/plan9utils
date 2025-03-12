@@ -1,0 +1,18 @@
+[Unit]
+Description=Plan9 factotum
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Slice=plan9.slice
+Environment=MNTPT=/mnt
+Type=forking
+Restart=always
+RestartSec=1
+ExecStart=/bin/bash -c 'PATH=/opt/plan9:$PATH factotum -m $MNTPT/factotum'
+ExecStop=/bin/bash -c 'PATH=/opt/plan9:$PATH pkill factotum'
+ExecStopPost=/bin/bash -c 'PATH=/opt/plan9:$PATH /opt/plan9/bin/unmount $MNTPT/factotum'
+
+
+[Install]
+WantedBy=plan9.target
