@@ -5,4 +5,4 @@ After=
 Wants=fontsrv.service plumber.service factotum.service
 
 [Install]
-WantedBy=
+WantedBy=default.target

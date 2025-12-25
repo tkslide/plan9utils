@@ -10,8 +10,8 @@ Type=forking
 Restart=always
 RestartSec=1
 ExecStart=/bin/bash -c 'PATH=/opt/plan9:$PATH plumber'
-ExecStartPost=/bin/bash -c 'PATH=/opt/plan9:$PATH /opt/plan9/bin/mount $(namespace)/plumb $MNTPT/plumb'
-ExecStop=/bin/bash -c 'PATH=/opt/plan9:$PATH pkill plumber'
+ExecStartPost=/bin/bash -c 'PATH=/opt/plan9:$PATH /opt/plan9/bin/mount $(/opt/plan9/bin/namespace)/plumb $MNTPT/plumb'
+ExecStop=/bin/bash -c 'PATH=/opt/plan9:$PATH pkill -x plumber'
 ExecStopPost=/bin/bash -c 'PATH=/opt/plan9:$PATH /opt/plan9/bin/unmount $MNTPT/plumb'
 
 [Install]
